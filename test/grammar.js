@@ -87,6 +87,22 @@ describe("grammar", function() {
 
   });
 
+  describe("repetitions", function() {
+
+    it("should produce a loop for the zero-or-more primitive", function() {
+      const code = g.zeroOrMore(
+        g.litteral("a"),
+      );
+
+      assert.deepEqual(code, [
+        "choice", +4,
+        "char", "a",
+        "commit", -6,
+      ]);
+    });
+
+  });
+
   describe("rules and the grammar object", function() {
 
     it("can create an empty grammar", function() {

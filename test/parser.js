@@ -17,7 +17,7 @@ describe("parser", function() {
     assert.equal(parser.running, false);
   });
 
-  it("should match litterals (cuccess)", function() {
+  it("should match litterals (success)", function() {
     const grammar = new g.Grammar();
     grammar.define("r1", g.litteral("a"));
 
@@ -84,6 +84,51 @@ describe("parser", function() {
     assert.equal(parser.status, "failure");
     assert.equal(parser.running, false);
     assert.equal(parser.tx, 0);
+  });
+
+  it("should match repetitions (0 occurence)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrMore(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("bc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 1);
+  });
+
+  it("should match repetitions (1 occurence)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrMore(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("abc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 2);
+  });
+
+  it("should match repetitions (2 occurences)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrMore(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("aabc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 3);
   });
 });
 
