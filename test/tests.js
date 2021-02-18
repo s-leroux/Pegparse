@@ -10,3 +10,5 @@ describe("module", function() {
   });
 });
 
+require("./grammar");
+require("./parser");
