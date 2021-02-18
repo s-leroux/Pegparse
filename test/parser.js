@@ -130,5 +130,18 @@ describe("parser", function() {
     assert.equal(parser.running, false);
     assert.equal(parser.tx, 3);
   });
+
+  it("should call and return from rules", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.rule("r2"));
+    grammar.define("r2", g.litteral("a"));
+
+    const parser = grammar.parser("r1");
+    parser.accept("aabc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 1);
+  });
 });
 

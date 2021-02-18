@@ -111,13 +111,13 @@ describe("grammar", function() {
       assert.isOk(grammar);
     });
 
-    it("should add the 'end' opcode to rules", function() {
+    it("should add the 'return' opcode at the end of the rules", function() {
       const grammar = new g.Grammar();
       grammar.define("r1", g.litteral("a"));
 
       assert.deepEqual(grammar.get("r1"), [
         "char", "a",
-        "end", undefined,
+        "ret", undefined,
       ]);
     });
 
