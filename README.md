@@ -10,6 +10,10 @@ Usage
 
 TBD
 
+References
+==========
+
+* http://www.inf.puc-rio.br/%7Eroberto/docs/peg.pdf
 
 License
 =======
