@@ -28,6 +28,21 @@ describe("grammar", function() {
 
   });
 
+  describe("concat", function() {
+
+    it("should join code fragments", function() {
+      const code1 = g.concat(
+        g.litteral("a"),
+        g.litteral("bc"),
+      );
+      const code2 = g.litteral("abc");
+
+      assert.deepEqual(code1, code2);
+    });
+
+  });
+
+
   describe("choices", function() {
 
     it("should leave a single alternative as-it", function() {
