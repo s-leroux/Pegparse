@@ -7,7 +7,7 @@ const g = require("../lib/grammar.js");
 
 describe("grammar", function() {
 
-  describe("litteral", function() {
+  describe("litterals", function() {
 
     it("should translate to sequence of 'char' opcodes", function() {
       const code = g.litteral("Hello");
@@ -24,6 +24,50 @@ describe("grammar", function() {
       const code = g.litteral("");
       assert.deepEqual(code,[
       ]);
+    });
+
+  });
+
+  describe("choices", function() {
+
+    it("should leave a single alternative as-it", function() {
+      const code = g.choice(
+        g.litteral("abc"),
+      );
+
+      assert.deepEqual(code,[
+        "char", "a",
+        "char", "b",
+        "char", "c",
+      ]);
+    });
+
+    it("should combine two alternatives", function() {
+      const code = g.choice(
+        g.litteral("abc"),
+        g.litteral("de"),
+      );
+
+      assert.deepEqual(code,[
+        "choice", +8,
+        "char", "a",
+        "char", "b",
+        "char", "c",
+        "commit", +4,
+        "char", "d",
+        "char", "e",
+      ]);
+    });
+
+    it("should use right associativiy to combine alternatives", function() {
+      const a = g.litteral("a");
+      const b = g.litteral("b");
+      const c = g.litteral("c");
+
+      const code1 = g.choice(a,b,c);
+      const code2 = g.choice(a, g.choice(b,c))
+
+      assert.deepEqual(code1, code2);
     });
 
   });

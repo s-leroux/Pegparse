@@ -40,5 +40,50 @@ describe("parser", function() {
     assert.equal(parser.running, false);
     assert.equal(parser.tx, 0);
   });
+
+  it("should match alternatives (success, 1st choice)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.choice(
+      g.litteral("a"),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("abc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 1);
+  });
+
+  it("should match alternatives (success, 2nd choice)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.choice(
+      g.litteral("a"),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("bc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 1);
+  });
+
+  it("should match alternatives (failure)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.choice(
+      g.litteral("a"),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("c");
+
+    assert.equal(parser.status, "failure");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 0);
+  });
 });
 
