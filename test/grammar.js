@@ -80,7 +80,7 @@ describe("grammar", function() {
       const c = g.litteral("c");
 
       const code1 = g.choice(a,b,c);
-      const code2 = g.choice(a, g.choice(b,c))
+      const code2 = g.choice(a, g.choice(b,c));
 
       assert.deepEqual(code1, code2);
     });
