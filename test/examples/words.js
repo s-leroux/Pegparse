@@ -7,25 +7,49 @@ const peg = require("../../lib/grammar.js");
 describe("word parser example", function() {
 
   const grammar = new peg.Grammar();
-  grammar.define("S", 
+  grammar.define("S",
     peg.choice(
       peg.rule("space"),
       peg.rule("word")
-    )
+    ),
+    (data) => data
   );
 
-  grammar.define("space", peg.oneOrMore(peg.litteral(" ")));
-  grammar.define("word", peg.oneOrMore(peg.litteral("a")));
-
-  const parser = grammar.parser("S");
-  parser.accept("aaaa    a aaa  a");
+  grammar.define("space",
+    peg.oneOrMore(peg.litteral(" ")),
+    (...chars) => ({space:"".concat(...chars)})
+  );
+  grammar.define("word",
+    peg.oneOrMore(peg.litteral("a")),
+    (...chars) => ({word:"".concat(...chars)})
+  );
 
   it("should parse a string", function() {
-    let from = 0 
+    const parser = grammar.parser("S");
+    parser.accept("aaaa    a aaa  a\0");
+
+    let from = 0
     while(true) {
-      console.log(parser.status, parser.tx, parser.tokens.substring(from, parser.tx));
+      console.log(parser.status, parser.tx, parser.tokens[parser.tx], parser.result());
       from = parser.tx;
-      if (!parser.tokens[parser.tx])
+      if (parser.tokens[parser.tx] === '\0')
+        break;
+
+      parser.restart();
+    }
+  });
+
+  it("should fail elegantly", function() {
+    const parser = grammar.parser("S");
+    parser.accept("aaaa  aaabaa\0");
+
+    let from = 0
+    while(true) {
+      console.log(parser.status, parser.tx, parser.tokens[parser.tx], parser.result());
+      from = parser.tx;
+      if (parser.status === "failure")
+        parser.skip(1);
+      if (parser.tokens[parser.tx] === '\0')
         break;
 
       parser.restart();
