@@ -10,7 +10,7 @@ describe("grammar", function() {
   describe("litterals", function() {
 
     it("should translate to sequence of 'char' opcodes", function() {
-      const code = g.litteral("Hello");
+      const code = g.litteral("Hello").instructions;
       assert.deepEqual(code,[
         "char", "H",
         "char", "e",
@@ -21,7 +21,7 @@ describe("grammar", function() {
     });
 
     it("should generate no code for the empty string", function() {
-      const code = g.litteral("");
+      const code = g.litteral("").instructions;
       assert.deepEqual(code,[
       ]);
     });
@@ -50,7 +50,7 @@ describe("grammar", function() {
         g.litteral("abc"),
       );
 
-      assert.deepEqual(code,[
+      assert.deepEqual(code.instructions,[
         "char", "a",
         "char", "b",
         "char", "c",
@@ -63,7 +63,7 @@ describe("grammar", function() {
         g.litteral("de"),
       );
 
-      assert.deepEqual(code,[
+      assert.deepEqual(code.instructions,[
         "choice", +8,
         "char", "a",
         "char", "b",
@@ -94,7 +94,7 @@ describe("grammar", function() {
         g.litteral("a"),
       );
 
-      assert.deepEqual(code, [
+      assert.deepEqual(code.instructions, [
         "choice", +4,
         "char", "a",
         "commit", -6,

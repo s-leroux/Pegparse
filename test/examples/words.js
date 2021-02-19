@@ -16,11 +16,11 @@ describe("word parser example", function() {
   );
 
   grammar.define("space",
-    peg.oneOrMore(peg.litteral(" ")),
+    peg.oneOrMore(" "),
     (...chars) => ({space:"".concat(...chars)})
   );
   grammar.define("word",
-    peg.oneOrMore(peg.litteral("a")),
+    peg.oneOrMore("a"),
     (...chars) => ({word:"".concat(...chars)})
   );
 
