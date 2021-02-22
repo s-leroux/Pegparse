@@ -12,3 +12,6 @@ describe("module", function() {
 
 require("./grammar");
 require("./parser");
+
+require("./examples/words");
+require("./examples/parenthesis");
