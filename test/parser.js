@@ -232,5 +232,32 @@ describe("parser", function() {
     assert.equal(parser.running, false);
     assert.deepEqual(parser.result(), ["aaa", "bb"]);
   });
+
+  describe("the \"and\" predicate", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", [ g.and("ab"), "a" ]);
+
+    it("should not consume any input", function() {
+      const parser = grammar.parser("r1");
+      parser.accept("ab");
+      parser.run();
+
+      assert.equal(parser.status, "success");
+      assert.equal(parser.running, false);
+      assert.deepEqual(parser.result(), ["a"]);
+      assert.equal(parser.tx, 1);
+    });
+
+    it("should reject pattern not matching the look-ahead", function() {
+      const parser = grammar.parser("r1");
+      parser.accept("ac");
+      parser.run();
+
+      assert.equal(parser.status, "failure");
+      assert.equal(parser.running, false);
+      assert.equal(parser.tx, 0);
+    });
+
+  });
 });
 
