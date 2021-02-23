@@ -8,7 +8,7 @@ A PEG parser for node.
 Usage
 =====
 
-TBD
+See the test/example folder for usage.
 
 References
 ==========
