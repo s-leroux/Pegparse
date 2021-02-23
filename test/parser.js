@@ -4,6 +4,7 @@ const debug = require("debug")("pegparse:test-parser");
 
 const assert = require("chai").assert;
 const g = require("../lib/grammar.js");
+const f = require("../lib/func.js");
 
 describe("parser", function() {
   it("should start and end on empty grammar", function() {
@@ -214,6 +215,22 @@ describe("parser", function() {
     assert.equal(parser.status, "success");
     assert.equal(parser.running, false);
     assert.equal(parser.tx, 1);
+  });
+
+  it("should return a valid 'rule' at definition-time", function() {
+    const grammar = new g.Grammar();
+    const A = grammar.define("a", g.zeroOrMore("a"), f.JOIN);
+    const B = grammar.define("b", g.zeroOrMore("b"), f.JOIN);
+
+    grammar.define("r1", [ A, B ]);
+
+    const parser = grammar.parser("r1");
+    parser.accept("aaabb");
+    parser.run();
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["aaa", "bb"]);
   });
 });
 
