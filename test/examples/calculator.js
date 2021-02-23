@@ -24,18 +24,18 @@ describe("calculator example", function() {
   );
 
   grammar.define("term",
-    peg.oneOrMore("1"),
+    peg.oneOrMore(peg.charset("0123456789")),
     (...digits) => parseInt(digits.join("")),
   );
 
 
   it("should calculate", function() {
     const parser = grammar.parser("S");
-    parser.accept("111+1111"),
+    parser.accept("1+23+4*15"),
     parser.run();
 
     assert.equal(parser.status, "success");
-    assert.equal(parser.result(), 1222);
+    assert.equal(parser.result(), 84);
   });
 
 

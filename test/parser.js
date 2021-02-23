@@ -41,6 +41,31 @@ describe("parser", function() {
     assert.equal(parser.tx, 0);
   });
 
+  it("should accept charsets (success)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.charset("abcd"));
+
+    const parser = grammar.parser("r1");
+    parser.accept("bc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["b"]);
+    assert.equal(parser.tx, 1);
+  });
+
+  it("should accept charsets (failure)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.charset("abcd"));
+
+    const parser = grammar.parser("r1");
+    parser.accept("efg");
+
+    assert.equal(parser.status, "failure");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 0);
+  });
+
   it("should match alternatives (success, 1st choice)", function() {
     const grammar = new g.Grammar();
     grammar.define("r1", g.choice(
@@ -129,6 +154,53 @@ describe("parser", function() {
     assert.equal(parser.status, "success");
     assert.equal(parser.running, false);
     assert.equal(parser.tx, 3);
+  });
+
+  it("should match zero-or-one (success, matching)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrOne(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("abc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["a", "b"]);
+    assert.equal(parser.tx, 2);
+  });
+
+  it("should match zero-or-one (success, non-matching)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrOne(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("bc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), [undefined, "b"]);
+    assert.equal(parser.tx, 1);
+  });
+
+  it("should match zero-or-one (failure)", function() {
+    const grammar = new g.Grammar();
+    grammar.define("r1", g.concat(
+      g.zeroOrOne(g.litteral("a")),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("aabc");
+
+    assert.equal(parser.status, "failure");
+    assert.equal(parser.running, false);
+    assert.equal(parser.tx, 1);
   });
 
   it("should call and return from rules", function() {

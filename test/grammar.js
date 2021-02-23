@@ -87,9 +87,9 @@ describe("grammar", function() {
 
   });
 
-  describe("repetitions", function() {
+  describe("quantifiers", function() {
 
-    it("should produce a loop for the zero-or-more primitive", function() {
+    it("should produce a loop for the zero-or-more quantifier", function() {
       const code = g.zeroOrMore(
         g.litteral("a"),
       );
