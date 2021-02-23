@@ -3,6 +3,7 @@
 const debug = require("debug")("pegparse:ex-words");
 
 const peg = require("../../lib/grammar.js");
+const assert = require("chai").assert;
 
 describe("word parser example", function() {
 
@@ -28,15 +29,26 @@ describe("word parser example", function() {
     const parser = grammar.parser("S");
     parser.accept("aaaa    a aaa  a\0");
 
-    let from = 0
+    let from = 0;
+    let result = [];
     while(true) {
-      console.log(parser.status, parser.tx, parser.tokens[parser.tx], parser.result());
+      assert.equal(parser.status, "success");
+      result.push(parser.result());
       from = parser.tx;
-      if (parser.tokens[parser.tx] === '\0')
+      if (parser.tokens[parser.tx] === "\0")
         break;
 
       parser.restart();
     }
+    assert.deepEqual(result, [
+      { "word": "aaaa" },
+      { "space": "    " },
+      { "word": "a" },
+      { "space": " " },
+      { "word": "aaa" },
+      { "space": "  " },
+      { "word": "a" },
+    ]);
   });
 
   it("should fail elegantly", function() {
@@ -45,7 +57,6 @@ describe("word parser example", function() {
 
     let from = 0
     while(true) {
-      console.log(parser.status, parser.tx, parser.tokens[parser.tx], parser.result());
       from = parser.tx;
       if (parser.status === "failure")
         parser.skip(1);

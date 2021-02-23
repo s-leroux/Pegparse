@@ -15,3 +15,4 @@ require("./parser");
 
 require("./examples/words");
 require("./examples/parenthesis");
+require("./examples/calculator");
