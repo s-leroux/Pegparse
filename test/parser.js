@@ -276,19 +276,7 @@ describe("parser", function() {
 
       parser.accept("aa bba   bbb");
 
-      while(true) {
-        if (parser.status === "success") {
-          result.push(parser.result());
-        }
-        else {
-          parser.tx += 1;
-        }
-        if(parser.tx >= parser.tokens.length) {
-          break;
-        }
-        parser.restart();
-        parser.run();
-      }
+      result.push(...parser.matchAll());
 
       assert.deepEqual(result, ["aa", "bba", "bbb"]);
     });

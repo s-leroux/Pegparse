@@ -29,18 +29,10 @@ describe("word parser example", function() {
     const parser = grammar.parser("S");
     parser.accept("aaaa    a aaa  a");
 
-    let from = 0;
     let result = [];
-    while(true) {
-      assert.equal(parser.status, "success");
-      result.push(parser.result());
-      from = parser.tx;
-      if (parser.tx >= parser.tokens.length)
-        break;
 
-      parser.restart();
-      parser.run();
-    }
+    result.push(...parser.matchAll());
+
     assert.deepEqual(result, [
       { "word": "aaaa" },
       { "space": "    " },
@@ -54,17 +46,17 @@ describe("word parser example", function() {
 
   it("should fail elegantly", function() {
     const parser = grammar.parser("S");
-    parser.accept("aaaa  aaabaa\0");
+    parser.accept("aaaa  aaabaa");
 
     let from = 0
     while(true) {
       from = parser.tx;
       if (parser.status === "failure")
         parser.skip(1);
-      if (parser.tokens[parser.tx] === '\0')
-        break;
 
-      parser.restart();
+      if (!parser.restart()) {
+        break;
+      }
       parser.run();
     }
   });
