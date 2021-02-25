@@ -259,5 +259,40 @@ describe("parser", function() {
     });
 
   });
+
+  describe("negative lookarround", function() {
+    const grammar = new g.Grammar();
+    const LETTER = g.charset("ab");
+    const WORD_BOUNDARY = g.nat(-1, LETTER);
+
+    grammar.define("r1", 
+      [ WORD_BOUNDARY, g.oneOrMore(LETTER) ],
+      (...letters) => letters.join("")
+    );
+
+    it("should detect word boundaries", function() {
+      const parser = grammar.parser("r1");
+      const result = [];
+
+      parser.accept("aa bba   bbb");
+
+      while(true) {
+        if (parser.status === "success") {
+          result.push(parser.result());
+        }
+        else {
+          parser.tx += 1;
+        }
+        if(parser.tx >= parser.tokens.length) {
+          break;
+        }
+        parser.restart();
+        parser.run();
+      }
+
+      assert.deepEqual(result, ["aa", "bba", "bbb"]);
+    });
+
+  });
 });
 
