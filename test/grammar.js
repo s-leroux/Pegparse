@@ -28,6 +28,37 @@ describe("grammar", function() {
 
   });
 
+  describe("charset", function() {
+
+    it("should accept litterals", function() {
+      const cs = g.charset("abcdefghijklmnopqrstuvwxyz");
+      const set = cs.instructions[1];
+
+      for(let c of "abcdefghijklmnopqrstuvwxyz") {
+        assert.isTrue(c.charCodeAt(0) in set, `${c} should be in set`);
+      }
+
+      for(let c of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+        assert.isFalse(c.charCodeAt(0) in set);
+      }
+    });
+
+    it("should accept ranges", function() {
+      const cs = g.charset("a-z", "A-Z");
+      const set = cs.instructions[1];
+
+      for(let c of "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+        assert.isTrue(c.charCodeAt(0) in set, `${c} should be in set`);
+      }
+
+      for(let c of ")(*&^%$#@!") {
+        assert.isFalse(c.charCodeAt(0) in set);
+      }
+    });
+
+  });
+
+
   describe("concat", function() {
 
     it("should join code fragments", function() {
