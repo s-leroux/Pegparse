@@ -18,9 +18,9 @@
   "author": "Sylvain Leroux <sylvain@chicoree.fr>",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/s-leroux/Backparse/issues"
+    "url": "https://github.com/s-leroux/Pegparse/issues"
   },
-  "homepage": "https://github.com/s-leroux/Backparse#readme",
+  "homepage": "https://github.com/s-leroux/Pegparse#readme",
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^7.19.0",
