@@ -282,5 +282,26 @@ describe("parser", function() {
     });
 
   });
+
+  describe("consume/capture", function() {
+    const grammar = new g.Grammar();
+    const LETTER = g.charset("ab");
+    const WORD = g.capture(g.oneOrMore(LETTER));
+
+    grammar.define("r1", 
+      [ WORD, g.zeroOrMore(g.consume(","), WORD) ],
+    );
+
+    it("should discard data from the input", function() {
+      const parser = grammar.parser("r1");
+      parser.accept("aa,bb,bbb");
+      parser.run();
+
+      assert.equal(parser.status, "success");
+      assert.deepEqual(parser.result(), [['a','a'],['b','b'],['b','b','b' ]]);
+
+    });
+
+  });
 });
 
