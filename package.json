@@ -4,7 +4,8 @@
   "description": "A PEG parser for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/tests.js"
+    "test": "mocha test/tests.js",
+    "docs": "jsdoc2md lib/** > docs/api.md"
   },
   "repository": {
     "type": "git",

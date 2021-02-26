@@ -156,8 +156,13 @@ Which leads to:
 
 Please take a look at the examples found in the `text/examples` folder for more informations.
 
-References
-==========
+API Reference
+=============
+
+See docs/api.md
+
+Resources
+=========
 
 * http://www.inf.puc-rio.br/%7Eroberto/docs/peg.pdf
 * http://www.inf.puc-rio.br/%7Eroberto/docs/ry10-01.pdf
