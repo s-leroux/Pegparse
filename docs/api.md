@@ -245,6 +245,7 @@ Return a new [Parser][31] for the grammar.
 #### Parameters
 
 -   `start` **[string][70]** The name of the rule to match.
+-   `context`  
 
 ## parser
 
@@ -256,6 +257,7 @@ The Parser class.
 
 -   `grammar` **[Grammar][71]** The grammar
 -   `start` **[String][70]** The rule to match
+-   `context`  
 
 ### dump
 

@@ -263,7 +263,7 @@ describe("parser", function() {
     const LETTER = g.charset("ab");
     const WORD_BOUNDARY = g.nat(-1, LETTER);
 
-    grammar.define("r1", 
+    grammar.define("r1",
       [ WORD_BOUNDARY, g.oneOrMore(LETTER) ],
       (...letters) => letters.join("")
     );
@@ -286,7 +286,7 @@ describe("parser", function() {
     const LETTER = g.charset("ab");
     const WORD = g.capture(g.oneOrMore(LETTER));
 
-    grammar.define("r1", 
+    grammar.define("r1",
       [ WORD, g.zeroOrMore(g.consume(","), WORD) ],
     );
 
@@ -298,6 +298,50 @@ describe("parser", function() {
       assert.equal(parser.status, "success");
       assert.deepEqual(parser.result(), [["a","a"],["b","b"],["b","b","b" ]]);
 
+    });
+
+  });
+
+  describe("external function", function() {
+
+    it("should be called when a rule is reduced", function() {
+      const grammar = new g.Grammar();
+      let result;
+
+      grammar.define("r1",
+        g.oneOrMore("a"),
+        (...content) => {
+          result = content;
+        }
+      );
+
+      const parser = grammar.parser("r1");
+      parser.accept("aaa");
+      parser.run();
+
+      assert.equal(parser.status, "success");
+      assert.deepEqual(result, ["a","a", "a"]);
+    });
+
+    it("should receive the user-supplied context bound to `this`", function() {
+      const grammar = new g.Grammar();
+      const context = Symbol();
+      let result;
+
+      grammar.define("r1",
+        g.oneOrMore("a"),
+        function(...content) {
+          assert.equal(this, context);
+          result = content;
+        }
+      );
+
+      const parser = grammar.parser("r1", context);
+      parser.accept("aaa");
+      parser.run();
+
+      assert.equal(parser.status, "success");
+      assert.deepEqual(result, ["a","a", "a"]);
     });
 
   });
