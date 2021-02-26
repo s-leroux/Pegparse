@@ -58,7 +58,7 @@ following grammar:
 Running the parser
 ------------------
 
-One you have deined the grammar, you can obtain a parser the will build a data structure
+One you have the grammar, you can obtain a parser the will build a data structure
 from your input data, according to the rules defined in the grammar. The only thing
 the parser has to know, is where to start:
 
@@ -73,7 +73,7 @@ Now, we pass some data to the parser and let it _run_ until completion:
     parser.run();
 ```
 
-And here is the result:
+Finally, here is the result:
 
 ```
     assert.equal(parser.status, "success");
