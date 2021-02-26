@@ -1,7 +1,5 @@
 "use strict";
 
-const debug = require("debug")("pegparse:ex-calculator");
-
 const peg = require("../../lib/grammar.js");
 const assert = require("chai").assert;
 

@@ -1,7 +1,5 @@
 "use strict";
 
-const debug = require("debug")("pegparse:ex-words");
-
 const peg = require("../../lib/grammar.js");
 const assert = require("chai").assert;
 
@@ -48,9 +46,7 @@ describe("word parser example", function() {
     const parser = grammar.parser("S");
     parser.accept("aaaa  aaabaa");
 
-    let from = 0
     while(true) {
-      from = parser.tx;
       if (parser.status === "failure")
         parser.skip(1);
 

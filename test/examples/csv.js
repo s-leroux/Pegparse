@@ -29,13 +29,13 @@ describe("CSV example for README file", function() {
     // a value is a string of _any character_ which is _not_ the comma
     grammar.define("value",
       peg.zeroOrMore(peg.not(","), peg.any()),
-    )
+    );
 
     // A quoted string is zero or more characters which are not a quote,
     // enclosed between quotes.
     grammar.define("quoted-string",
       [ peg.consume("\""), peg.zeroOrMore(peg.not("\""), peg.any()), peg.consume("\"") ],
-    )
+    );
 
     //
     // Using the parser
@@ -47,12 +47,12 @@ describe("CSV example for README file", function() {
     assert.equal(parser.status, "success");
     assert.deepEqual(
       parser.result(),
-        [
-          [ [ "H", "e", "r", "e", ], ],
-          [ [ "a", "r", "e", ], ],
-          [ [ "s", "o", "m", "e", ",", "C", "S", "V", ] ],
-          [ [ "d", "a", "t", "a", ], ]
-        ]
+      [
+        [ [ "H", "e", "r", "e", ], ],
+        [ [ "a", "r", "e", ], ],
+        [ [ "s", "o", "m", "e", ",", "C", "S", "V", ] ],
+        [ [ "d", "a", "t", "a", ], ]
+      ]
     );
   });
 
@@ -78,7 +78,7 @@ describe("CSV example for README file", function() {
       function(...letters) {
         return letters.join("");
       }
-    )
+    );
 
     // A quoted string is zero or characters which are not a quote,
     // enclosed between quotes.
@@ -87,7 +87,7 @@ describe("CSV example for README file", function() {
       function(...letters) {
         return letters.join("");
       }
-    )
+    );
 
     const parser = grammar.parser("S"); // get a parser ready to start at state "S"
     parser.accept("Here,are,\"some,CSV\",data");
@@ -96,7 +96,7 @@ describe("CSV example for README file", function() {
     assert.equal(parser.status, "success");
     assert.deepEqual(
       parser.result(),
-        [ 'Here', 'are', 'some,CSV', 'data' ]
+      [ "Here", "are", "some,CSV", "data" ]
     );
   });
 });

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/tests.js",
-    "docs": "documentation build lib/** -f md > docs/api.md"
+    "docs": "documentation build lib/** -f md > docs/api.md",
+    "lint": "eslint --fix ."
   },
   "repository": {
     "type": "git",

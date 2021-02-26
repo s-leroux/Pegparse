@@ -1,1 +1,3 @@
-module.exports = require('./lib/pegparse');
+"use strict";
+
+module.exports = require("./lib/pegparse");

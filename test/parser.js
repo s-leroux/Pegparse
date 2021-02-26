@@ -1,7 +1,5 @@
 "use strict";
 
-const debug = require("debug")("pegparse:test-parser");
-
 const assert = require("chai").assert;
 const g = require("../lib/grammar.js");
 const f = require("../lib/func.js");
@@ -298,7 +296,7 @@ describe("parser", function() {
       parser.run();
 
       assert.equal(parser.status, "success");
-      assert.deepEqual(parser.result(), [['a','a'],['b','b'],['b','b','b' ]]);
+      assert.deepEqual(parser.result(), [["a","a"],["b","b"],["b","b","b" ]]);
 
     });
 
