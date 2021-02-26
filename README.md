@@ -159,7 +159,7 @@ Please take a look at the examples found in the `text/examples` folder for more 
 API Reference
 =============
 
-See docs/api.md
+See [docs/api.md](./docs/api.md)
 
 Resources
 =========
