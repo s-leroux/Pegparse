@@ -2,19 +2,29 @@
 
 const assert = require("chai").assert;
 const g = require("../lib/grammar.js");
+const func = require("../lib/func.js");
 
 describe("grammar", function() {
 
   describe("litterals", function() {
 
-    it("should translate to sequence of 'char' opcodes", function() {
+    it("should translate an individual character to a 'char' opcode", function() {
+      const code = g.litteral("H").instructions;
+      assert.deepEqual(code,[
+        "char", "H",
+      ]);
+    });
+
+    it("should translate to packed sequence of 'char' opcodes", function() {
       const code = g.litteral("Hello").instructions;
       assert.deepEqual(code,[
+        "frame", undefined,
         "char", "H",
         "char", "e",
         "char", "l",
         "char", "l",
         "char", "o",
+        "reduce", func.JOIN,
       ]);
     });
 
@@ -64,9 +74,13 @@ describe("grammar", function() {
         g.litteral("a"),
         g.litteral("bc"),
       );
-      const code2 = g.litteral("abc");
+      const code2 = [
+        ...g.litteral("a").instructions,
+        ...g.litteral("bc").instructions,
+        
+      ]
 
-      assert.deepEqual(code1, code2);
+      assert.deepEqual(code1.instructions, code2);
     });
 
   });
@@ -79,11 +93,7 @@ describe("grammar", function() {
         g.litteral("abc"),
       );
 
-      assert.deepEqual(code.instructions,[
-        "char", "a",
-        "char", "b",
-        "char", "c",
-      ]);
+      assert.deepEqual(code.instructions,g.litteral("abc").instructions);
     });
 
     it("should combine two alternatives", function() {
@@ -93,13 +103,10 @@ describe("grammar", function() {
       );
 
       assert.deepEqual(code.instructions,[
-        "choice", +8,
-        "char", "a",
-        "char", "b",
-        "char", "c",
-        "commit", +4,
-        "char", "d",
-        "char", "e",
+        "choice", +12,
+        ...g.litteral("abc").instructions,
+        "commit", +8,
+        ...g.litteral("de").instructions,
       ]);
     });
 
