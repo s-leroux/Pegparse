@@ -202,6 +202,42 @@ describe("parser", function() {
     assert.equal(parser.tx, 1);
   });
 
+  it("should match optional values (success, matching)", function() {
+    const grammar = new g.Grammar();
+    const sentinel = Symbol();
+
+    grammar.define("r1", g.concat(
+      g.optional(g.litteral("a"), sentinel),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("abc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["a", "b"]);
+    assert.equal(parser.tx, 2);
+  });
+
+  it("should match zero-or-one (success, non-matching)", function() {
+    const grammar = new g.Grammar();
+    const sentinel = Symbol();
+
+    grammar.define("r1", g.concat(
+      g.optional(g.litteral("a"), sentinel),
+      g.litteral("b"),
+    ));
+
+    const parser = grammar.parser("r1");
+    parser.accept("bc");
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), [sentinel, "b"]);
+    assert.equal(parser.tx, 1);
+  });
+
   it("should call and return from rules", function() {
     const grammar = new g.Grammar();
     grammar.define("r1", g.rule("r2"));
