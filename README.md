@@ -9,7 +9,7 @@ Usage
 =====
 
 Pegparse is a _Parsing Expression Grammar_ (PEG) implementation for JavaScript.
-It will build a datastructure from an input stream and a grammar.
+It will build a data structure from an input stream and a grammar.
 
 To work, Pegparse needs three things:
 
@@ -22,7 +22,7 @@ Defining the grammar
 --------------------
 
 You construct the grammar using the functions exported from `lib/grammar.js`.
-For example, to parse a comma separated value (CSV) file, you could write the
+For example, to parse a comma-separated value (CSV) file, you could write the
 following grammar:
 
 ```
@@ -58,9 +58,9 @@ following grammar:
 Running the parser
 ------------------
 
-One you have the grammar, you can obtain a parser the will build a data structure
-from your input data, according to the rules defined in the grammar. The only thing
-the parser has to know, is where to start:
+Once you have the grammar, you can obtain a parser to build a data structure
+from your input data according to the grammar rules. The only thing
+the parser has to know is where to start:
 
 ```
     const parser = grammar.parser("S"); // get a parser ready to start at state "S"
@@ -88,18 +88,18 @@ Finally, here is the result:
     );
 ```
 
-As you can see, by default the parser returns the data in nested array. These nested array
-forms a tree-like structure whose leaves are the indivisual characters. Each rule traversed
-during the parsing has created a new node in the tree. In other words, each time some input
-match a rule, the corresponding data are packed into a new array. Great. But not
-very practical. In particular, we've lost the semantic informations during the
-process: we can't know which sub-tree match which rule.
+As you can see, by default, the parser returns the data in nested arrays. These nested arrays
+form a tree-like structure whose leaves are the individual characters. Each rule traversed
+during the parsing has created a new node in the tree. In other words, each time an input
+matches a rule, the corresponding data are packed into a new array. Great. But not
+very practical. In particular, we've lost the semantic information during the
+process: we can't know which sub-tree matches which rule.
 
 Custom actions
 --------------
 
 The default action when reducing a rule is to pack all the nested data into an array.
-Most of the time you want something more specific than that. In particular,
+Most of the time, you want something more specific than that. In particular,
 we would like to create strings instead of manipulating individual characters.
 
 You instruct Pegparse to use a custom reduction action by passing a JavaScript function
@@ -124,7 +124,7 @@ as an extra parameter to the `define()` call:
     )
 ```
 
-Now, insteat of creating an array of characters, Pegparse will now create a string when
+Now, instead of creating an array of characters, Pegparse will create a string when
 reducing the _value_ and _quoted-string_ rules.
 
 The result of parsing the test string is now:
@@ -143,18 +143,18 @@ _data_ rule reduction. We can fix that easily:
       peg.choice(
         peg.rule("quoted-string"),
         peg.rule("value"),
-      ),
+      ),insteat
       function(value) { return value; }
     );
 ```
 
-Which leads to:
+This leads to:
 
 ```
         [ 'Here', 'are', 'some,CSV', 'data' ]
 ```
 
-Please take a look at the examples found in the `text/examples` folder for more informations.
+Please take a look at the examples found in the `text/examples` folder for more information.
 
 API Reference
 =============
@@ -170,7 +170,8 @@ Resources
 License
 =======
 
-Brought to you under the terms of the GPLv3.0 or later license.
+Starting with Perparse 0.0.9, this software is provided under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+Previous versions were released under the terms of the GPLv3.0 or later license.
 
 Copyright (c) 2021 Sylvain Leroux
 
