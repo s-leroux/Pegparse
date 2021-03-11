@@ -1,6 +1,6 @@
 {
   "name": "pegparse",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A PEG parser for Node.js",
   "main": "index.js",
   "scripts": {
