@@ -22,55 +22,61 @@
     -   [Parameters][18]
 -   [zeroOrOne][19]
     -   [Parameters][20]
--   [zeroOrMore][21]
+-   [optional][21]
     -   [Parameters][22]
--   [oneOrMore][23]
+-   [zeroOrMore][23]
     -   [Parameters][24]
--   [capture][25]
+-   [oneOrMore][25]
     -   [Parameters][26]
--   [Grammar][27]
-    -   [Examples][28]
-    -   [define][29]
-        -   [Parameters][30]
-    -   [parser][31]
-        -   [Parameters][32]
--   [parser][33]
--   [Parser][34]
-    -   [Parameters][35]
-    -   [dump][36]
-    -   [pushd][37]
+-   [string][27]
+    -   [Parameters][28]
+-   [capture][29]
+    -   [Parameters][30]
+-   [join][31]
+    -   [Parameters][32]
+-   [Grammar][33]
+    -   [Examples][34]
+    -   [define][35]
+        -   [Parameters][36]
+    -   [parser][37]
         -   [Parameters][38]
-    -   [char][39]
-        -   [Parameters][40]
-    -   [charset][41]
-        -   [Parameters][42]
-    -   [move][43]
+-   [parser][39]
+-   [Parser][40]
+    -   [Parameters][41]
+    -   [dump][42]
+    -   [pushd][43]
         -   [Parameters][44]
-    -   [any][45]
-    -   [fail][46]
-    -   [end][47]
-    -   [call][48]
-        -   [Parameters][49]
-    -   [jsr][50]
-        -   [Parameters][51]
-    -   [ret][52]
-        -   [Parameters][53]
-    -   [frame][54]
-    -   [drop][55]
-    -   [reduce][56]
+    -   [char][45]
+        -   [Parameters][46]
+    -   [charset][47]
+        -   [Parameters][48]
+    -   [move][49]
+        -   [Parameters][50]
+    -   [any][51]
+    -   [fail][52]
+    -   [end][53]
+    -   [call][54]
+        -   [Parameters][55]
+    -   [jsr][56]
         -   [Parameters][57]
-    -   [choice][58]
+    -   [ret][58]
         -   [Parameters][59]
-    -   [commit][60]
-        -   [Parameters][61]
-    -   [accept][62]
+    -   [frame][60]
+    -   [drop][61]
+    -   [reduce][62]
         -   [Parameters][63]
-    -   [run][64]
-    -   [restart][65]
-    -   [skip][66]
+    -   [choice][64]
+        -   [Parameters][65]
+    -   [commit][66]
         -   [Parameters][67]
-    -   [result][68]
-    -   [matchAll][69]
+    -   [accept][68]
+        -   [Parameters][69]
+    -   [run][70]
+    -   [restart][71]
+    -   [skip][72]
+        -   [Parameters][73]
+    -   [result][74]
+    -   [matchAll][75]
 
 ## grammar
 
@@ -89,7 +95,7 @@ in the set ("0123456789"), or a range ("0-9").
 
 Match a string of characters.
 
-Capture each character individually.
+Capture the entire string
 
 ### Parameters
 
@@ -149,7 +155,7 @@ Match a rule of the grammar.
 
 ### Parameters
 
--   `name` **[string][70]** The name of the rule to match. The rule does not have
+-   `name` **[string][76]** The name of the rule to match. The rule does not have
     already exist. It might be defined later.
 
 ## concat
@@ -186,6 +192,19 @@ If there is no match, capture the _undefined_ special value.
 
 -   `programs` **...any** 
 
+## optional
+
+A variation of tThe zero-or-one quantifier.
+
+This form takes only one program as an argument, but
+it allows specifying the default value to substitute
+if there is no match.
+
+### Parameters
+
+-   `program`  
+-   `defaultValue`  
+
 ## zeroOrMore
 
 The zero-or-more quantifier.
@@ -206,9 +225,31 @@ Match 1 or several repetitions of the same program.
 
 -   `programs` **...any** 
 
+## string
+
+Macro equivalent to `join(oneOrMore(...))`.
+
+Match 1 or several repetition of a pattern and convert the
+capture into a string.
+
+### Parameters
+
+-   `programs` **...any** 
+
 ## capture
 
 Capture the data from a sub-program into an array.
+
+This allow data capture without requiring to define
+a new rule specifically for that.
+
+### Parameters
+
+-   `programs` **...any** 
+
+## join
+
+Capture the data from a sub-program into a string
 
 This allow data capture without requiring to define
 a new rule specifically for that.
@@ -234,17 +275,17 @@ Define a new rule.
 
 #### Parameters
 
--   `name` **[string][70]** The name of the rule
+-   `name` **[string][76]** The name of the rule
 -   `program`  
 -   `action`  
 
 ### parser
 
-Return a new [Parser][31] for the grammar.
+Return a new [Parser][37] for the grammar.
 
 #### Parameters
 
--   `start` **[string][70]** The name of the rule to match.
+-   `start` **[string][76]** The name of the rule to match.
 -   `context`  
 
 ## parser
@@ -255,8 +296,8 @@ The Parser class.
 
 ### Parameters
 
--   `grammar` **[Grammar][71]** The grammar
--   `start` **[String][70]** The rule to match
+-   `grammar` **[Grammar][77]** The grammar
+-   `start` **[String][78]** The rule to match
 -   `context`  
 
 ### dump
@@ -372,7 +413,7 @@ Drop the current stack frame.
 Reduce the current stack frame to only one item.
 If a callable is given as a parameter, replace the current
 stack frame by the result of the function applied to the data
-on the frame. If no use function is specified, pack the data in an array.
+on the frame. If no user function is specified, pack the data in an array.
 
 #### Parameters
 
@@ -409,7 +450,7 @@ accept one or more characters. Run the machine as long as we have token to proce
 continue execution until the machine stops.
 
 Call this function when you now there will no more tokens
-to append using the [accept()][72] call.
+to append using the [accept()][79] call.
 
 ### restart
 
@@ -478,106 +519,120 @@ of input tokens betwenn matches.
 
 [20]: #parameters-8
 
-[21]: #zeroormore
+[21]: #optional
 
 [22]: #parameters-9
 
-[23]: #oneormore
+[23]: #zeroormore
 
 [24]: #parameters-10
 
-[25]: #capture
+[25]: #oneormore
 
 [26]: #parameters-11
 
-[27]: #grammar-1
+[27]: #string
 
-[28]: #examples
+[28]: #parameters-12
 
-[29]: #define
+[29]: #capture
 
-[30]: #parameters-12
+[30]: #parameters-13
 
-[31]: #parser
+[31]: #join
 
-[32]: #parameters-13
+[32]: #parameters-14
 
-[33]: #parser-1
+[33]: #grammar-1
 
-[34]: #parser-2
+[34]: #examples
 
-[35]: #parameters-14
+[35]: #define
 
-[36]: #dump
+[36]: #parameters-15
 
-[37]: #pushd
+[37]: #parser
 
-[38]: #parameters-15
+[38]: #parameters-16
 
-[39]: #char
+[39]: #parser-1
 
-[40]: #parameters-16
+[40]: #parser-2
 
-[41]: #charset-1
+[41]: #parameters-17
 
-[42]: #parameters-17
+[42]: #dump
 
-[43]: #move
+[43]: #pushd
 
 [44]: #parameters-18
 
-[45]: #any-1
+[45]: #char
 
-[46]: #fail
+[46]: #parameters-19
 
-[47]: #end
+[47]: #charset-1
 
-[48]: #call
+[48]: #parameters-20
 
-[49]: #parameters-19
+[49]: #move
 
-[50]: #jsr
+[50]: #parameters-21
 
-[51]: #parameters-20
+[51]: #any-1
 
-[52]: #ret
+[52]: #fail
 
-[53]: #parameters-21
+[53]: #end
 
-[54]: #frame
+[54]: #call
 
-[55]: #drop
+[55]: #parameters-22
 
-[56]: #reduce
+[56]: #jsr
 
-[57]: #parameters-22
+[57]: #parameters-23
 
-[58]: #choice-1
+[58]: #ret
 
-[59]: #parameters-23
+[59]: #parameters-24
 
-[60]: #commit
+[60]: #frame
 
-[61]: #parameters-24
+[61]: #drop
 
-[62]: #accept
+[62]: #reduce
 
 [63]: #parameters-25
 
-[64]: #run
+[64]: #choice-1
 
-[65]: #restart
+[65]: #parameters-26
 
-[66]: #skip
+[66]: #commit
 
-[67]: #parameters-26
+[67]: #parameters-27
 
-[68]: #result
+[68]: #accept
 
-[69]: #matchall
+[69]: #parameters-28
 
-[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[70]: #run
 
-[71]: #grammar
+[71]: #restart
 
-[72]: accept()
+[72]: #skip
+
+[73]: #parameters-29
+
+[74]: #result
+
+[75]: #matchall
+
+[76]: #string
+
+[77]: #grammar
+
+[78]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[79]: accept()

@@ -93,7 +93,7 @@ describe("grammar", function() {
         ...g.litteral("a").instructions,
         ...g.litteral("bc").instructions,
         
-      ]
+      ];
 
       assert.deepEqual(code1.instructions, code2);
     });

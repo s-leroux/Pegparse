@@ -253,6 +253,34 @@ describe("parser", function() {
     assert.equal(parser.tx, 1);
   });
 
+  it("can join tokens", function() {
+    const grammar = new g.Grammar();
+
+    grammar.define("r1", g.join(g.oneOrMore("a"), g.oneOrMore("b")) );
+
+    const parser = grammar.parser("r1");
+    parser.accept("aaabb");
+    parser.run();
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["aaabb"]);
+  });
+
+  it("can build strings of tokens", function() {
+    const grammar = new g.Grammar();
+
+    grammar.define("r1", g.string(g.not("c"), g.any()) );
+
+    const parser = grammar.parser("r1");
+    parser.accept("aaabbc");
+    parser.run();
+
+    assert.equal(parser.status, "success");
+    assert.equal(parser.running, false);
+    assert.deepEqual(parser.result(), ["aaabb"]);
+  });
+
   it("should call and return from rules", function() {
     const grammar = new g.Grammar();
     grammar.define("r1", g.rule("r2"));
