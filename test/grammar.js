@@ -55,7 +55,7 @@ describe("grammar", function() {
 
     it("should accept litterals", function() {
       const cs = g.charset("abcdefghijklmnopqrstuvwxyz");
-      const set = cs.instructions[1];
+      const set = cs._set;
 
       for(let c of "abcdefghijklmnopqrstuvwxyz") {
         assert.isTrue(c.charCodeAt(0) in set, `${c} should be in set`);
@@ -68,7 +68,7 @@ describe("grammar", function() {
 
     it("should accept ranges", function() {
       const cs = g.charset("a-z", "A-Z");
-      const set = cs.instructions[1];
+      const set = cs._set;
 
       for(let c of "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
         assert.isTrue(c.charCodeAt(0) in set, `${c} should be in set`);
@@ -77,6 +77,46 @@ describe("grammar", function() {
       for(let c of ")(*&^%$#@!") {
         assert.isFalse(c.charCodeAt(0) in set);
       }
+    });
+
+    it("can be extended", function() {
+      const cs1 = g.charset("0-5");
+      const cs2 = cs1.union("6-9");
+
+      for(let c of "012345") {
+        assert.isTrue(c.charCodeAt(0) in cs1._set, `${c} should be in set`);
+        assert.isTrue(c.charCodeAt(0) in cs2._set, `${c} should be in set`);
+      }
+
+      // Initial charset should remain unchanged!
+      for(let c of "6789") {
+        assert.isFalse(c.charCodeAt(0) in cs1._set, `${c} should be in set`);
+        assert.isTrue(c.charCodeAt(0) in cs2._set, `${c} should be in set`);
+      }
+    });
+
+    it("can be restricted", function() {
+      const cs1 = g.charset("0-9");
+      const cs2 = cs1.difference("3","6","78", "abcd");
+
+      for(let c of "012459") {
+        assert.isTrue(c.charCodeAt(0) in cs1._set, `${c} should be in set`);
+        assert.isTrue(c.charCodeAt(0) in cs2._set, `${c} should be in set`);
+      }
+
+      // Initial charset should remain unchanged!
+      for(let c of "3678") {
+        assert.isTrue(c.charCodeAt(0) in cs1._set, `${c} should be in set`);
+        assert.isFalse(c.charCodeAt(0) in cs2._set, `${c} should be in set`);
+      }
+    });
+
+    it("can be merged", function() {
+      const cs1 = g.charset("0-5");
+      const cs2 = g.charset("6-9");
+      const cs3 = g.charset("0-9");
+
+      assert.deepEqual(cs1.union(cs2), cs3);
     });
 
   });
@@ -92,7 +132,7 @@ describe("grammar", function() {
       const code2 = [
         ...g.litteral("a").instructions,
         ...g.litteral("bc").instructions,
-        
+
       ];
 
       assert.deepEqual(code1.instructions, code2);
