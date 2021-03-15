@@ -194,6 +194,24 @@ describe("grammar", function() {
 
   });
 
+  describe("utilities and macros", function() {
+
+    it("except", function() {
+      const code1 = g.concat(g.not("aa"), g.not("bb"), [g.any(), g.any()]);
+      const code2 = g.except([g.any(), g.any()], "aa", "bb");
+
+      assert.deepEqual(code2.instructions, code1.instructions);
+    });
+
+    it("anyExcept", function() {
+      const code1 = g.concat(g.not("aa"), g.not("bb"), g.any());
+      const code2 = g.anyExcept("aa", "bb");
+
+      assert.deepEqual(code2.instructions, code1.instructions);
+    });
+
+  });
+
   describe("rules and the grammar object", function() {
 
     it("can create an empty grammar", function() {
